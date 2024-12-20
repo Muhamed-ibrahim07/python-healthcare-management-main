@@ -1,9 +1,5 @@
-# Healthcare Management System
-
-[![GitHub](https://img.shields.io/badge/GitHub-Healthcare%20Management%20System-blue?style=flat&logo=github)](https://github.com/ashkaaar/healthcare-management-system)
-
 ## Overview
-This project is a Healthcare Management System developed using Python, designed to facilitate the user-friendly management of patient, doctor, and department records for healthcare facilities. The system utilizes SQLite for efficient database management, Streamlit for the interface, and Pandas for seamless data handling. It incorporates secure access and exclusive features for doctors and medical lab scientists.
+This project is MEDIBOLT developed using Python, designed to facilitate the user-friendly management of patient, doctor, and department records for healthcare facilities. The system utilizes SQLite for efficient database management, Streamlit for the interface, and Pandas for seamless data handling. It incorporates secure access and exclusive features for doctors and medical lab scientists.
 
 ## Features
 - Database Management System (DBMS) project for healthcare facilities.
@@ -25,11 +21,13 @@ This project is a Healthcare Management System developed using Python, designed 
 - **Internationalization (I18n) Support:** Provide support for multiple languages to accommodate users from diverse linguistic backgrounds.
 - **User Training Resources:** Develop user manuals, tutorials, and training resources to ensure healthcare professionals can easily adopt and use the system.
 
+NOTE: WE ARE USING DATABASES, WE USE THREADS TO TRACK TIMER AND ALERT YOU BEFORE 1 HOUR OF THE APPOINTMENT SCHEDULED 
+FEEL FREE TO COLLABORATE...
+
 ## Installation
 1. Clone the repository: `git clone https://github.com/ashkaaar/healthcare-management-system.git`
 2. Navigate into the directory: `cd healthcare-management-system`
-3. Install the dependencies: `pip install -r requirements.txt`
-4. Start the application: `streamlit run main.py`
+3. Start the application: `streamlit run main.py`
 
 ## Usage
 1. Access the application through the provided Streamlit interface.
