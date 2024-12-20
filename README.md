@@ -27,7 +27,7 @@ FEEL FREE TO COLLABORATE...
 ## Installation
 1. Clone the repository: `git clone https://github.com/ashkaaar/healthcare-management-system.git`
 2. Navigate into the directory: `cd healthcare-management-system`
-3. Start the application: `streamlit run main.py`
+3. Start the application: `streamlit run hims_app.py`
 
 ## Usage
 1. Access the application through the provided Streamlit interface.
