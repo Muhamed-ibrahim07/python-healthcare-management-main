@@ -52,8 +52,16 @@ class Appointment:
                 appointment_date = st.date_input("Appointment Date", min_value= datetime.now())
                 self.appointment_date = appointment_date.strftime("%Y-%m-%d")
 
-                appointment_time = st.time_input("Appointment Time")
-                self.appointment_time = appointment_time.strftime("%H:%M:%S")
+                appointment_time_str = st.text_input("Enter Appointment Time (HH:MM)", "")  # Default is an empty string
+
+                try:
+                    # Parse and validate the time format
+                    appointment_time = datetime.strptime(appointment_time_str, "%H:%M").time()  # Convert to time object
+                    self.appointment_time = appointment_time.strftime("%H:%M:%S")  # Format as HH:MM:SS
+                    st.success(f"Valid Appointment Time: {self.appointment_time}")
+                except ValueError:
+                    if appointment_time_str:  # Display error only if user has entered something
+                        st.error("Invalid time format. Please use HH:MM.")
 
                 if st.button("Book"):
                     self.id = self.generate_appointment_id()  # Generate ID after booking
@@ -105,46 +113,50 @@ class Appointment:
 
                     def display_message_at_datetime(date, time_str, message, title="Notification"):
                         def wait_and_display():
-                            # Combine date and time to create the target datetime string
-                            target_datetime_str = f"{date} {time_str}:00"  # Append seconds to match datetime format
-                            # Parse the target datetime with the new format
-                            target = datetime.strptime(target_datetime_str, "%Y/%m/%d %H:%M:%S")
+                            try:
+                                # Combine date and time to create the target datetime string
+                                target_datetime_str = f"{date} {time_str}:00"  # Append seconds if not provided
 
-                            # Adjust the target time by subtracting one hour
-                            target = target - timedelta(hours=1)
+                                # Parse the target datetime with the corrected format
+                                target = datetime.strptime(target_datetime_str, "%Y-%m-%d %H:%M:%S")  # Updated format
 
-                            # Get the current time
-                            current_time = datetime.now()
+                                # Adjust the target time to be one hour earlier
+                                notify_time = target - timedelta(hours=1)
 
-                            # Check if the target time has already passed
-                            if target < current_time:
-                                # Display an error message box if the target time has already passed
-                                ctypes.windll.user32.MessageBoxW(0, "Error: The target time has already passed.", title,
-                                                                 1)
-                                return
+                                # Get the current time
+                                current_time = datetime.now()
 
-                            # Calculate the difference in seconds between now and the target time
-                            seconds_to_wait = (target - current_time).total_seconds()
+                                # Check if the notification time has already passed
+                                if notify_time < current_time:
+                                    # Display an error message box if the notification time has already passed
+                                    ctypes.windll.user32.MessageBoxW(0,
+                                                                     "Error: The notification time has already passed.",
+                                                                     title, 1)
+                                    return
 
-                            # Sleep the thread for the calculated time
-                            time.sleep(seconds_to_wait)  # Use the time module's sleep
+                                # Calculate the difference in seconds between now and the notification time
+                                seconds_to_wait = (notify_time - current_time).total_seconds()
 
-                            # Display the message box after the sleep duration
-                            ctypes.windll.user32.MessageBoxW(0, message, title, 1)
+                                print(f"Current Time: {current_time}")
+                                print(f"Target Time: {target}")
+                                print(f"Notification Time (1 hour earlier): {notify_time}")
+                                print(f"Waiting for {seconds_to_wait} seconds.")
+
+                                # Sleep for the calculated time
+                                time.sleep(seconds_to_wait)
+
+                                # Display the message box at the correct time
+                                ctypes.windll.user32.MessageBoxW(0, message, title, 1)
+                            except Exception as e:
+                                print(f"Error: {e}")
 
                         # Create a thread to run the function independently
                         thread = threading.Thread(target=wait_and_display, daemon=False)  # Non-daemon thread
                         thread.start()
 
-                    # Schedule a notification
-                    display_message_at_datetime(
-                        date="2024/12/20",  # Date in yyyy/mm/dd format
-                        time_str="06:55",  # Time in hh:mm format
-                        message="You Have An Appointment after 1 Hour!"
-                    )
+                    display_message_at_datetime(date=appointment_date, time_str=appointment_time_str, message="You have a appointment in one hour", title="Notification")
 
-                    # Main program ends after showing the message box
-                    print("Notification displayed, program ends.")
+
 
     def generate_appointment_id(self):
         now = datetime.now()
